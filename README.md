@@ -2,7 +2,7 @@
 
 1. Install MongoDB from https://www.mongodb.com/try/download/community
 2. Run `mongosh` in a terminal to verify that MongoDB server is running as background service
-3. Once inside `mongosh`, run: `use todo-app` 
+3. Once inside `mongosh`, run: `use todo` 
 
 4. Open terminal in the `backend` folder
 5. Run `npm install`
