@@ -2,37 +2,41 @@
  * Created Date: 22.04.2025 10:33:37
  * Author: Julian Hardtung
  * 
- * Last Modified: 22.04.2025 12:40:54
+ * Last Modified: 22.04.2025 12:51:12
  * Modified By: Julian Hardtung
  * 
  * Description: routes for CRUD operations on todos 
  *              (not including UPDATE, as it is not needed for the app)
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const TODOS = [];
+const Todo = require("../model/ToDo");
 
-router.get('/', async function (req, res, next) {
-  res.status(200).send(TODOS);
+router.get("/", async function (req, res, next) {
+  try {
+    var todosArray = await Todo.find({}).exec();
+    res.status(200).send(todosArray);
+  } catch (error) {
+    res.status(404).send("Error retrieving todos: " + error);
+  }
 });
 
-router.post('/', async function (req, res, next) {
-  const todo = {
-    _id: TODOS.length + 1,
-    text: req.body.text,
-  };
-  TODOS.push(todo);
-  res.status(200).send(todo);
+router.post("/", async function (req, res, next) {
+  try {
+    const result = await Todo.create(req.body);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send("Couldn't create Todo: " + error.message);
+  }
 });
 
-router.delete('/:todo_id', async function (req, res, next) {
-  const todo = TODOS.find((todo) => todo._id === parseInt(req.params.todo_id));
-
-  if (!todo) {
-    return res.status(404).send('Todo not found');
-  } else {
-    res.status(200).send(todo);
+router.delete("/:todo_id", async function (req, res, next) {
+  try {
+    const result = await Todo.findByIdAndDelete(req.params.todo_id);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send("Couldn't edit Todo: " + error.message);
   }
 });
 
